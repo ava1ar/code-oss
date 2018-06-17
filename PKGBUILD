@@ -2,7 +2,8 @@
 # Contributor: Francisco Magalhães <franmagneto gmail com>
 # Contributor: ava1ar <mail(at)ava1ar(dot)me>
 
-pkgname=code-git
+_pkgname=code-oss
+pkgname=${_pkgname}-git
 pkgdesc='Microsoft Code for Linux, Open Source version from git (VSCode)'
 pkgver=1.24.1_777c8e57e0
 pkgrel=1
@@ -11,17 +12,14 @@ url="https://github.com/Microsoft/vscode"
 license=('MIT')
 makedepends=('npm' 'nodejs-lts-carbon' 'gulp' 'python2' 'git' 'yarn')
 depends=('gtk3' 'gconf' 'libnotify' 'libxss' 'libxtst' 'libxkbfile' 'nss' 'alsa-lib')
-conflicts=('visual-studio-code-git')
-provides=('visual-studio-code-git')
+provides=('code')
+conflicts=('code')
+options=(!strip)
 source=("git+https://github.com/Microsoft/vscode"
-        "${pkgname}.desktop"
-        "startup_script.patch"
         "product_json.patch"
         "code-liveshare.patch"
 		"aarch64.patch")
 sha256sums=('SKIP'
-            'dd212d343a02466f04bd9def162428ac997b53c4c839cea220ab61382d01f538'
-            '7447807230c09b80529e5cde4a1abfbb687937b16790b77a227ae39ba4c603ce'
             '2a26fd93719970069da0a326b5ed77592234ffc6d05587b4d5bb8242c7f4c9b1'
             '90b8915d8195546088e845f3205fb965e941561d309c8b462bb0b22a159e041c'
             'aa35f64af75a1abeb11499b365ccdf01c0555d6613f55101a5faffc50663ea6b')
@@ -47,8 +45,9 @@ esac
 
 pkgver() {
     cd "${srcdir}/vscode"
-    printf "%s_%s" "$(git for-each-ref --sort=-committerdate refs/tags | head -1 | cut -d'/' -f3)" \
-                   "$(git rev-parse --short HEAD)"
+    printf "%s_%s" \
+		"$(git for-each-ref --sort=-committerdate refs/tags | head -1 | cut -d'/' -f3)" \
+        "$(git rev-parse --short HEAD)"
 }
 
 prepare() {
@@ -57,13 +56,13 @@ prepare() {
     # This patch no longer contains proprietary modifications.
     # See https://github.com/Microsoft/vscode/issues/31168 for details.
     patch -p1 -i "${srcdir}/product_json.patch"
+
 	# fix aarch64 build
     patch -p1 -i "${srcdir}/aarch64.patch"
 
     local _commit=$(cd "${srcdir}/vscode" && git rev-parse HEAD)
     local _datestamp=$(date -u -Is | sed 's/\+00:00/Z/')
-    sed -e "s/@COMMIT@/${_commit}/" -e "s/@DATE@/${_datestamp}/" \
-        -i product.json
+    sed -e "s/@COMMIT@/${_commit}/" -e "s/@DATE@/${_datestamp}/" -i product.json
 
     # See https://github.com/MicrosoftDocs/live-share/issues/262 for details
     patch -p1 -i "${srcdir}/code-liveshare.patch"
@@ -94,28 +93,30 @@ build() {
         echo
         exit 1
     fi
-
-    # Patch the startup script to know where the app is installed, rather
-    # than guessing...
-    ( cd "${srcdir}/VSCode-linux-${_vscode_arch}" && \
-            patch -p1 -i "${srcdir}/startup_script.patch" )
 }
 
 package() {
-    install -m 0755 -d "${pkgdir}/usr/share/code-git"
-    cp -r "${srcdir}/VSCode-linux-${_vscode_arch}"/* "${pkgdir}/usr/share/code-git"
+	# Install main software bundle
+    install -m 0755 -d "${pkgdir}"/usr/share/${_pkgname}
+    cp -r "${srcdir}"/VSCode-linux-${_vscode_arch}/* "${pkgdir}"/usr/share/${_pkgname}
 
-    # Put the startup script in /usr/bin
-    mv "${pkgdir}/usr/share/code-git/bin" "${pkgdir}/usr"
+    # Create symlink to the startup script in /usr/bin
+    install -m 0755 -d "${pkgdir}"/usr/bin
+	ln -s /usr/share/${_pkgname}/bin/${_pkgname} "${pkgdir}"/usr/bin/${_pkgname}
 
-    # Avoid conflicting with the stable OSS build
-    mv "${pkgdir}/usr/bin/code-oss" "${pkgdir}/usr/bin/code-git"
+    # Create .desktop file
+	install -m 0755 -d "${pkgdir}"/usr/share/applications
+	sed -e "s|@@NAME_LONG@@|Microsoft Code OSS|g" \
+		-e "s|@@NAME@@|${_pkgname}|g" \
+		-e "s|@@NAME_SHORT@@|Code - OSS|g" \
+		-e "s|@@ICON@@|code|g" "${srcdir}"/vscode/resources/linux/code.desktop \
+		> "${pkgdir}"/usr/share/applications/${_pkgname}.desktop
 
-    # Add .desktop file
-    install -D -m644 "${srcdir}/${pkgname}.desktop" \
-            "${pkgdir}/usr/share/applications/${pkgname}.desktop"
+	# Install icon
+    install -D -m644 "${pkgdir}"/usr/share/${_pkgname}/resources/app/resources/linux/code.png \
+           "${pkgdir}"/usr/share/pixmaps/code.png
 
     # Install license file
-    install -D -m644 "${srcdir}/VSCode-linux-${_vscode_arch}/resources/app/LICENSE.txt" \
-            "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+    install -D -m644 "${srcdir}"/VSCode-linux-${_vscode_arch}/resources/app/LICENSE.txt \
+            "${pkgdir}"/usr/share/licenses/${_pkgname}/LICENSE
 }
