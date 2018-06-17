@@ -96,25 +96,25 @@ build() {
 }
 
 package() {
-	# Install main software bundle
+    # Install main software bundle
     install -m 0755 -d "${pkgdir}"/usr/share/${_pkgname}
     cp -r "${srcdir}"/VSCode-linux-${_vscode_arch}/* "${pkgdir}"/usr/share/${_pkgname}
 
     # Create symlink to the startup script in /usr/bin
     install -m 0755 -d "${pkgdir}"/usr/bin
-	ln -s /usr/share/${_pkgname}/bin/${_pkgname} "${pkgdir}"/usr/bin/${_pkgname}
+    ln -s /usr/share/${_pkgname}/bin/${_pkgname} "${pkgdir}"/usr/bin/${_pkgname}
 
     # Create .desktop file
-	install -m 0755 -d "${pkgdir}"/usr/share/applications
-	sed -e "s|@@NAME_LONG@@|Microsoft Code OSS|g" \
-		-e "s|@@NAME@@|${_pkgname}|g" \
-		-e "s|@@NAME_SHORT@@|Code - OSS|g" \
-		-e "s|@@ICON@@|code|g" "${srcdir}"/vscode/resources/linux/code.desktop \
-		> "${pkgdir}"/usr/share/applications/${_pkgname}.desktop
+    install -m 0755 -d "${pkgdir}"/usr/share/applications
+    sed -e "s|@@NAME_LONG@@|Microsoft Code OSS|g" \
+        -e "s|@@NAME@@|${_pkgname}|g" \
+        -e "s|@@NAME_SHORT@@|Code - OSS|g" \
+        -e "s|@@ICON@@|code|g" "${srcdir}"/vscode/resources/linux/code.desktop \
+        > "${pkgdir}"/usr/share/applications/${_pkgname}.desktop
 
 	# Install icon
     install -D -m644 "${pkgdir}"/usr/share/${_pkgname}/resources/app/resources/linux/code.png \
-           "${pkgdir}"/usr/share/pixmaps/code.png
+		    "${pkgdir}"/usr/share/pixmaps/code.png
 
     # Install license file
     install -D -m644 "${srcdir}"/VSCode-linux-${_vscode_arch}/resources/app/LICENSE.txt \
