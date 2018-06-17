@@ -1,0 +1,35 @@
+pkgbase = code-oss
+	pkgdesc = Microsoft Code for Linux, Open Source version (VSCode)
+	pkgver = 1.24.1
+	pkgrel = 1
+	url = https://github.com/Microsoft/vscode
+	arch = i686
+	arch = x86_64
+	arch = armv7h
+	license = MIT
+	makedepends = npm
+	makedepends = nodejs-lts-carbon
+	makedepends = gulp
+	makedepends = python2
+	makedepends = git
+	makedepends = yarn
+	depends = gtk3
+	depends = gconf
+	depends = libnotify
+	depends = libxss
+	depends = libxtst
+	depends = libxkbfile
+	depends = nss
+	depends = alsa-lib
+	conflicts = code
+	conflicts = code-oss-git
+	options = !strip
+	source = vscode-1.24.1::git+https://github.com/Microsoft/vscode#tag=1.24.1
+	source = product_json.patch
+	source = code-liveshare.patch
+	sha256sums = SKIP
+	sha256sums = 2a26fd93719970069da0a326b5ed77592234ffc6d05587b4d5bb8242c7f4c9b1
+	sha256sums = 90b8915d8195546088e845f3205fb965e941561d309c8b462bb0b22a159e041c
+
+pkgname = code-oss
+
