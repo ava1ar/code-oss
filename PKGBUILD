@@ -18,7 +18,7 @@ options=(!strip)
 source=("git+https://github.com/Microsoft/vscode"
         "product_json.patch"
         "code-liveshare.patch"
-		"aarch64.patch")
+        "aarch64.patch")
 sha256sums=('SKIP'
             '2a26fd93719970069da0a326b5ed77592234ffc6d05587b4d5bb8242c7f4c9b1'
             '90b8915d8195546088e845f3205fb965e941561d309c8b462bb0b22a159e041c'
@@ -46,7 +46,7 @@ esac
 pkgver() {
     cd "${srcdir}/vscode"
     printf "%s_%s" \
-		"$(git for-each-ref --sort=-committerdate refs/tags | head -1 | cut -d'/' -f3)" \
+        "$(git for-each-ref --sort=-committerdate refs/tags | head -1 | cut -d'/' -f3)" \
         "$(git rev-parse --short HEAD)"
 }
 
@@ -57,7 +57,7 @@ prepare() {
     # See https://github.com/Microsoft/vscode/issues/31168 for details.
     patch -p1 -i "${srcdir}/product_json.patch"
 
-	# fix aarch64 build
+    # fix aarch64 build
     patch -p1 -i "${srcdir}/aarch64.patch"
 
     local _commit=$(cd "${srcdir}/vscode" && git rev-parse HEAD)
@@ -112,9 +112,9 @@ package() {
         -e "s|@@ICON@@|code|g" "${srcdir}"/vscode/resources/linux/code.desktop \
         > "${pkgdir}"/usr/share/applications/${_pkgname}.desktop
 
-	# Install icon
+    # Install icon
     install -D -m644 "${pkgdir}"/usr/share/${_pkgname}/resources/app/resources/linux/code.png \
-		    "${pkgdir}"/usr/share/pixmaps/code.png
+            "${pkgdir}"/usr/share/pixmaps/code.png
 
     # Install license file
     install -D -m644 "${srcdir}"/VSCode-linux-${_vscode_arch}/resources/app/LICENSE.txt \
