@@ -5,7 +5,7 @@
 _pkgname=code-oss
 pkgname=${_pkgname}-git
 pkgdesc='Microsoft Code for Linux, Open Source version from git (VSCode)'
-pkgver=1.24.1_777c8e57e0
+pkgver=1.25.0_b0ef947992
 pkgrel=1
 arch=('i686' 'x86_64' 'armv7h' 'aarch64')
 url="https://github.com/Microsoft/vscode"
@@ -22,7 +22,7 @@ source=("git+https://github.com/Microsoft/vscode"
 sha256sums=('SKIP'
             '2a26fd93719970069da0a326b5ed77592234ffc6d05587b4d5bb8242c7f4c9b1'
             '90b8915d8195546088e845f3205fb965e941561d309c8b462bb0b22a159e041c'
-            'aa35f64af75a1abeb11499b365ccdf01c0555d6613f55101a5faffc50663ea6b')
+            '573075ccd4fb211940c1f7f88bf0d79196e72deb06fd06ba5b8ef4b8737c1c3d')
 
 case "$CARCH" in
     i686)
