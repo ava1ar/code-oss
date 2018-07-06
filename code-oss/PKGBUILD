@@ -4,7 +4,7 @@
 
 pkgname=code-oss
 pkgdesc='Microsoft Code for Linux, Open Source version (VSCode)'
-pkgver=1.24.1
+pkgver=1.25.0
 pkgrel=1
 arch=('i686' 'x86_64' 'armv7h')
 url="https://github.com/Microsoft/vscode"
