@@ -14,8 +14,8 @@ depends=('gtk3' 'gconf' 'libnotify' 'libxss' 'libxtst' 'libxkbfile' 'nss' 'alsa-
 conflicts=('code' 'code-oss-git')
 options=(!strip)
 source=("vscode-${pkgver}::git+https://github.com/Microsoft/vscode#tag=${pkgver}"
-        "product_json.patch"
-        "code-liveshare.patch")
+        'product_json.patch'
+        'code-liveshare.patch')
 sha256sums=('SKIP'
             '2a26fd93719970069da0a326b5ed77592234ffc6d05587b4d5bb8242c7f4c9b1'
             '90b8915d8195546088e845f3205fb965e941561d309c8b462bb0b22a159e041c')

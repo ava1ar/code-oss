@@ -74,3 +74,29 @@ index ecbc45df32..2c672ff81f 100644
  gulp.task('vscode-linux-x64-build-snap', ['vscode-linux-x64-prepare-snap'], buildSnapPackage('x64'));
  gulp.task('vscode-linux-arm-build-snap', ['vscode-linux-arm-prepare-snap'], buildSnapPackage('arm'));
 +gulp.task('vscode-linux-arm64-build-snap', ['vscode-linux-arm64-prepare-snap'], buildSnapPackage('arm64'));
+diff --git a/package.json b/package.json
+index ab9c9d2ee7..7a2bcc870f 100644
+--- a/package.json
++++ b/package.json
+@@ -66,7 +66,7 @@
+     "cson-parser": "^1.3.3",
+     "debounce": "^1.0.0",
+     "documentdb": "^1.5.1",
+-    "electron-mksnapshot": "~1.7.0",
++    "electron-mksnapshot": "~2.0.0",
+     "eslint": "^3.4.0",
+     "event-stream": "^3.1.7",
+     "express": "^4.13.1",
+diff --git a/test/smoke/package.json b/test/smoke/package.json
+index 0ce01ada8b..86ae18e2dd 100644
+--- a/test/smoke/package.json
++++ b/test/smoke/package.json
+@@ -22,7 +22,7 @@
+     "@types/webdriverio": "4.6.1",
+     "concurrently": "^3.5.1",
+     "cpx": "^1.5.0",
+-    "electron": "1.7.7",
++    "electron": "2.0.0",
+     "htmlparser2": "^3.9.2",
+     "mkdirp": "^0.5.1",
+     "mocha": "^5.2.0",
